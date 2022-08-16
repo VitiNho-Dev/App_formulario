@@ -10,6 +10,12 @@ class AppWidget extends StatelessWidget {
       title: 'Form App',
       routeInformationParser: Modular.routeInformationParser,
       routerDelegate: Modular.routerDelegate,
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        primaryColor: Colors.blue,
+        brightness: Brightness.dark,
+      ),
     );
   }
 }
