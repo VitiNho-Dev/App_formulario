@@ -12,6 +12,8 @@ class LoginPage extends StatelessWidget {
 
   final LoginStore store;
   final _formKey = GlobalKey<FormState>();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class LoginPage extends StatelessWidget {
                   CustomTextFormField(
                     label: 'Email',
                     hint: 'example@.com',
+                    controller: _email,
                     validator: (value) {
                       return value != 'victor@gmail.com'
                           ? 'Email inválido'
@@ -51,6 +54,7 @@ class LoginPage extends StatelessWidget {
                   CustomTextFormField(
                     label: 'Password',
                     hint: '0000',
+                    controller: _password,
                     validator: (value) {
                       return value != '1234' ? 'Password inválido' : null;
                     },
@@ -65,6 +69,8 @@ class LoginPage extends StatelessWidget {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   Modular.to.pushNamed('/HomePage');
+                  _email.clear();
+                  _password.clear();
                 }
               },
               child: const Text(
