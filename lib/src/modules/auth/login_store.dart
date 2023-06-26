@@ -1,14 +1,13 @@
 import 'package:flutter_triple/flutter_triple.dart';
 
 class LoginStore extends NotifierStore<Exception, bool> {
-  LoginStore(
-    Object initialState,
-    this.email,
-    this.password,
-  ) : super(false);
-
   final String email;
   final String password;
+
+  LoginStore({
+    this.email = '',
+    this.password = '',
+  }) : super(false);
 
   Future<void> login() async {
     setLoading(true);

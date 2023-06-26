@@ -5,12 +5,13 @@ import 'package:form_app/src/modules/auth/login_store.dart';
 import '../../shared/components/custom_text_form_field.dart';
 
 class LoginPage extends StatelessWidget {
+  final LoginStore store;
+
   LoginPage({
     Key? key,
     required this.store,
   }) : super(key: key);
 
-  final LoginStore store;
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
