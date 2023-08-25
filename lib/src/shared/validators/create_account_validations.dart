@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
-
 mixin CreateAccountValidations {
   // Validação do campo Nome
   String? validateName(String? value) {
+    if (value == null || value.isEmpty) return 'Campo obrigatório';
+    return null;
+  }
+
+  // Validação do campo EMail
+  String? validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Campo obrigatório';
     return null;
   }
@@ -35,14 +39,8 @@ mixin CreateAccountValidations {
   }
 
   // Validação do campo de aceitar o termos
-  void validateAccepetdTerms(bool value, BuildContext context) {
-    if (!value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('É preciso aceitar os termos'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
+  String? validateAccepetdTerms(bool value) {
+    if (!value) return 'É preciso aceitar os termos';
+    return null;
   }
 }

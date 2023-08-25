@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../shared/components/custom_text_form_field.dart';
-import 'create_account_controller.dart';
+import '../../../shared/components/custom_text_form_field.dart';
+import '../controller/create_account_controller.dart';
+import '../state/create_account_state.dart';
 
 class CreateAccountPage extends StatefulWidget {
   final CreateAccountController createAccountController;
@@ -17,6 +19,24 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   CreateAccountController get controller => widget.createAccountController;
+  final _formKey = GlobalKey<FormState>();
+
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final confirmEmailController = TextEditingController();
+  final cpfController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  bool acceptedTerms = false;
+
+  void confirmAcceptanceOfTerms(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +48,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         centerTitle: true,
       ),
       body: Form(
-        key: controller.formKey,
+        key: _formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SizedBox(
@@ -41,55 +61,51 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   label: 'Nome e Sobrenome',
                   hint: 'Digite seu nome completo',
                   validator: controller.validateName,
-                  controller: controller.fullName,
+                  controller: nameController,
                 ),
                 CustomTextFormField(
                   label: 'Email',
                   hint: 'Digite seu email',
-                  validator: controller.validateEmailController.validateEmail,
-                  controller: controller.email,
+                  validator: controller.validateEmail,
+                  controller: emailController,
                 ),
                 CustomTextFormField(
                   label: 'Confirmar Email',
                   hint: 'Digite novamente seu email',
-                  onTap: () => controller.validateEmailController.sendEmail(
-                    controller.email.text,
-                    context,
-                  ),
                   validator: (value) => controller.validateConfirmEmail(
                     value,
-                    controller.email.text,
+                    emailController.text,
                   ),
-                  controller: controller.confirmEmail,
+                  controller: confirmEmailController,
                 ),
                 CustomTextFormField(
                   label: 'CPF',
                   hint: 'Digite seu CPF',
                   validator: controller.validateCPF,
-                  controller: controller.cpf,
+                  controller: cpfController,
                 ),
                 CustomTextFormField(
                   label: 'Senha',
                   hint: 'Digite sua senha',
                   validator: controller.validatePassword,
-                  controller: controller.password,
+                  controller: passwordController,
                 ),
                 CustomTextFormField(
                   label: 'Confirmar Senha',
                   hint: 'Digite novamente sua senha',
                   validator: (value) => controller.validateConfirmPassword(
                     value,
-                    controller.password.text,
+                    passwordController.text,
                   ),
-                  controller: controller.confirmPassword,
+                  controller: confirmPasswordController,
                 ),
                 Row(
                   children: [
                     Checkbox(
-                      value: controller.acceptedTerms,
+                      value: acceptedTerms,
                       onChanged: (value) {
                         setState(() {
-                          controller.acceptedTerms = value!;
+                          acceptedTerms = value!;
                         });
                       },
                     ),
@@ -98,17 +114,21 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    controller.validateEmailController.sendEmail(
-                      controller.email.text,
-                      context,
-                    );
+                    final accepted = controller //
+                        .validateAccepetdTerms(acceptedTerms);
+                    if (accepted != null) {
+                      confirmAcceptanceOfTerms(accepted);
+                    }
 
-                    controller.validateAccepetdTerms(
-                      controller.acceptedTerms,
-                      context,
-                    );
-
-                    controller.createAccount(context);
+                    if (_formKey.currentState!.validate()) {
+                      controller.createAccount(
+                        emailController.text,
+                        passwordController.text,
+                      );
+                      if (controller.value is CreateAccountSuccessState) {
+                        Modular.to.navigate('/HomePage');
+                      }
+                    }
                   },
                   child: const Text('Criar Conta'),
                 ),

@@ -27,14 +27,10 @@ class LoginPage extends StatelessWidget {
             const Center(
               child: Text(
                 'Login',
-                style: TextStyle(
-                  fontSize: 24,
-                ),
+                style: TextStyle(fontSize: 24),
               ),
             ),
-            const SizedBox(
-              height: 24,
-            ),
+            const SizedBox(height: 24),
             Form(
               key: _formKey,
               child: Column(
@@ -49,9 +45,7 @@ class LoginPage extends StatelessWidget {
                           : null;
                     },
                   ),
-                  const SizedBox(
-                    height: 12,
-                  ),
+                  const SizedBox(height: 12),
                   CustomTextFormField(
                     label: 'Password',
                     hint: '0000',
@@ -63,9 +57,7 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
@@ -74,9 +66,7 @@ class LoginPage extends StatelessWidget {
                   _password.clear();
                 }
               },
-              child: const Text(
-                'Entrar',
-              ),
+              child: const Text('Entrar'),
             ),
           ],
         ),
